@@ -25,51 +25,101 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    [data-testid="stSidebar"] { display: none; }
-    [data-testid="stSidebarNav"] { display: none; }
-    .stApp { background-color: #f5f7f5; }
-    .block-container { padding-top: 1rem; }
 
-  .metric-grid{
-  display.grid
-  grid-template-columns: repeat(4, 1fr)
-  grid-column-gap: 2rem
-  grid-row-gap: 1rem
-  }
+[data-testid="stSidebar"] { display: none; }
+[data-testid="stSidebarNav"] { display: none; }
 
-  .metric-card{
-  background-color: #fff
-  border-radius: 15px
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
-  padding: 2rem
-  text-align: center
-  }
-  }
+.stApp {
+    background-color: #f5f7f5;
+}
 
-    .metric-label { font-size: 0.72rem; color: #555; margin-bottom: 4px; }
-    .metric-value { font-size: 1.6rem; font-weight: 700; color: #111; line-height: 1.1; }
-    .metric-unit  { font-size: 0.72rem; color: #555; }
+.block-container {
+    padding-top: 1rem;
+    max-width: 1200px;
+}
 
-    .stor-bar-track {
-        height: 14px;
-        background: #e0e8e0;
-        border-radius: 7px;
-        overflow: hidden;
-        margin: 6px 0 4px;
-    }
 
-    .btable { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-    .btable th {
-        text-align: left;
-        padding: 6px 8px;
-        color: #666;
-        font-weight: 600;
-        font-size: 0.75rem;
-        border-bottom: 1px solid #ddd;
-    }
-    .btable td { padding: 7px 8px; border-bottom: 0.5px solid #eee; color: #111; }
-    .btable tr:last-child td { border-bottom: none; }
-    .btable .rv { text-align: right; font-family: monospace; color: #333; }
+
+.main-title{
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 1rem;
+}
+
+
+
+div[data-testid="stSelectbox"],
+div[data-testid="stNumberInput"]{
+    margin-bottom: 0.6rem;
+}
+
+div[data-testid="stSelectbox"] > div,
+div[data-testid="stNumberInput"] > div{
+    border-radius: 10px;
+}
+
+
+.stNumberInput input{
+    text-align:center;
+    font-size:16px !important;
+    font-weight:600;
+}
+
+
+
+.metric-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:1rem;
+    margin-top:1rem;
+}
+
+.metric-card{
+    background:#e6e6e6;
+    border-radius:20px;
+    padding:1rem;
+    text-align:center;
+}
+
+.metric-label{
+    font-size:0.9rem;
+    color:#333;
+    margin-bottom:0.5rem;
+}
+
+.metric-value{
+    font-size:2rem;
+    font-weight:700;
+    color:#111;
+}
+
+.metric-unit{
+    font-size:0.9rem;
+    color:#555;
+}
+
+
+
+.stContainer{
+    border-radius:15px;
+}
+
+
+
+.config-box{
+    background:#eef3ef;
+    padding:1rem;
+    border-radius:10px;
+    height:100%;
+}
+
+.section-title{
+    font-size:1.2rem;
+    font-weight:600;
+    margin-bottom:1rem;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -136,15 +186,22 @@ CAM_INFO = {
         "flash": "32 MB ext. flash",
         "usd":   "100 MB/s",
         "usb":   "USB 12 Mb/s",
-    }, # Obtained from The OpenMV Website
+    },
     "OpenMV Cam RT1062": {
         "proc":  "RT1062 @ 600 MHz",
         "ram":   "32 MB SDRAM",
         "flash": "16 MB flash",
         "usd":   "25 MB/s",
         "usb":   "USB-C 480 Mb/s",
-    }, # Obtained from The OpenMV Website
+    },
 }
+
+#cam_sel = st.selectbox(
+#    "Camera",
+#    list(CAM_INFO.keys())
+#)
+
+# c = CAM_INFO[cam_sel]
 
 # 5. Helpers
 
@@ -174,6 +231,7 @@ def storage_bar_html(pct: float, over: bool) -> str:
 hcol, bcol = st.columns((6,1))
 with hcol:
     st.markdown(
+    "<div class='main-title'>Data Budget Calculator</div>",
         f"<div style='background:white;border-bottom:1px solid #ddd;padding:0.6rem 1rem;"
         f"border-radius:8px;display:flex;align-items:center;gap:1rem;margin-bottom:1rem;'>"
         f"<span style='font-size:1rem;font-weight:600;color:#111;'> Payload-MILO Data Budget Calculator</span>"
