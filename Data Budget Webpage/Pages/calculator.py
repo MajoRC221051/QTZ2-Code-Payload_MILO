@@ -255,10 +255,10 @@ fmt_label = {
 }[fmt_sel]
 
 res_short = res_sel.split("—")[0].strip()
-c = CAM_INFO[cam_sel]
+#c = CAM_INFO[cam_sel]
 
 rows = [
-    ("Camera",             cam_sel),
+    # ("Camera",             cam_sel),
     ("Processor",         c["proc"]),
     ("RAM / Flash",        f"{c['ram']} / {c['flash']}"),
     ("Vel. uSD",           c["usd"]),
