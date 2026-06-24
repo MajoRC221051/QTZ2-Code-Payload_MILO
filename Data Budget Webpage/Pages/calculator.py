@@ -130,7 +130,7 @@ left, right = st.columns(2)
 
 #cam_name = st.session_state["cam_selected"]
 
-hcol, bcol = st.columns((6,2))
+hcol, bcol = st.columns((6,1))
 with hcol:
     st.markdown(
     "<div class='main-title'>Data Budget Calculator</div>",
