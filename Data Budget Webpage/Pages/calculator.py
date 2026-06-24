@@ -84,6 +84,8 @@ Resolutions = {
     "QVGA — 320×240":   (320,  240),
 }
 
+Formats = ["RGB565", "Grayscale", "JPEG (Compressed)"] # Image format
+
 res_sel = st.selectbox(
     "Resolution",
     list(Resolutions.keys())
@@ -125,7 +127,7 @@ stor_gb = st.number_input(
 
 cam_sel = cam_name
 
-Formats = ["RGB565", "Grayscale", "JPEG (Compressed)"] # Image format
+
 
 CAM_INFO = {
     "OpenMV Cam H7 Plus": {
