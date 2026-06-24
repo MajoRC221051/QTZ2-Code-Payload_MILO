@@ -232,13 +232,8 @@ hcol, bcol = st.columns((6,1))
 with hcol:
     st.markdown(
     "<div class='main-title'>Data Budget Calculator</div>",
-        f"<div style='background:white;border-bottom:1px solid #ddd;padding:0.6rem 1rem;"
-        f"border-radius:8px;display:flex;align-items:center;gap:1rem;margin-bottom:1rem;'>"
-        f"<span style='font-size:1rem;font-weight:600;color:#111;'> Payload-MILO Data Budget Calculator</span>"
-       # f"<span style='margin-left:auto;font-size:0.85rem;font-weight:600;color:#1a9fd4;'>{cam_name}</span>"
-        f"</div>",
-        unsafe_allow_html=True,
-    )
+    unsafe_allow_html=True
+)
 #with bcol:
     # if st.button("← Volver", use_container_width=True):
     #    st.switch_page("app.py")
