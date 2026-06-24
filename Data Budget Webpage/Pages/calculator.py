@@ -89,6 +89,42 @@ res_sel = st.selectbox(
     list(Resolutions.keys())
 )
 
+fmt_sel = st.selectbox(
+    "Format",
+    Formats
+)
+
+jpeg_q = st.slider(
+    "JPEG Quality",
+    10, 100, 80
+)
+
+imgs_orbit = st.number_input(
+    "Images per orbit",
+    min_value=1,
+    value=10
+)
+
+orbits_day = st.number_input(
+    "Orbits per day",
+    min_value=1,
+    value=15
+)
+
+mission_days = st.number_input(
+    "Mission days",
+    min_value=1,
+    value=30
+)
+
+stor_gb = st.number_input(
+    "Storage (GB)",
+    min_value=1,
+    value=32
+)
+
+cam_sel = cam_name
+
 Formats = ["RGB565", "Grayscale", "JPEG (Compressed)"] # Image format
 
 CAM_INFO = {
