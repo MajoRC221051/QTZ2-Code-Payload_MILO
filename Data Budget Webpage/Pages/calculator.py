@@ -84,6 +84,11 @@ Resolutions = {
     "QVGA — 320×240":   (320,  240),
 }
 
+res_sel = st.selectbox(
+    "Resolution",
+    list(Resolutions.keys())
+)
+
 Formats = ["RGB565", "Grayscale", "JPEG (Compressed)"] # Image format
 
 CAM_INFO = {
