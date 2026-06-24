@@ -125,7 +125,7 @@ stor_gb = st.number_input(
     value=32
 )
 
-cam_sel = cam_name
+#cam_sel = cam_name
 
 
 
