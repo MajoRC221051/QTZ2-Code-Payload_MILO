@@ -128,7 +128,7 @@ def storage_bar_html(pct: float, over: bool) -> str:
 
 #cam_name = st.session_state["cam_selected"]
 
-hcol, bcol = st.columns[(6,1)]
+hcol, bcol = st.columns((6,1))
 with hcol:
     st.markdown(
         f"<div style='background:white;border-bottom:1px solid #ddd;padding:0.6rem 1rem;"
