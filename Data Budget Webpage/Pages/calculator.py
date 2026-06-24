@@ -123,6 +123,23 @@ div[data-testid="stNumberInput"] > div{
 </style>
 """, unsafe_allow_html=True)
 
+st.title("Data Budget Calculator")
+
+left, right = st.columns(2)
+
+  # 3. Header
+
+#cam_name = st.session_state["cam_selected"]
+
+hcol, bcol = st.columns((6,1))
+with hcol:
+    st.markdown(
+    "<div class='main-title'>Data Budget Calculator</div>",
+    unsafe_allow_html=True
+)
+#with bcol:
+    # if st.button("← Volver", use_container_width=True):
+    #    st.switch_page("app.py")
 
 # 4. Variables definition
 
@@ -224,19 +241,7 @@ def storage_bar_html(pct: float, over: bool) -> str:
     )
 
 
-  # 6. Header
 
-#cam_name = st.session_state["cam_selected"]
-
-hcol, bcol = st.columns((6,1))
-with hcol:
-    st.markdown(
-    "<div class='main-title'>Data Budget Calculator</div>",
-    unsafe_allow_html=True
-)
-#with bcol:
-    # if st.button("← Volver", use_container_width=True):
-    #    st.switch_page("app.py")
 
 # 7. Mission Calculations
 
