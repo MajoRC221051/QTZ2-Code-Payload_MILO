@@ -126,7 +126,7 @@ def storage_bar_html(pct: float, over: bool) -> str:
 
   # 6. Header
 
-cam_name = st.session_state["cam_selected"]
+#cam_name = st.session_state["cam_selected"]
 
 hcol, bcol = st.columns[(6,1)]
 with hcol:
