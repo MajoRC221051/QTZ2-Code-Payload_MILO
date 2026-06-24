@@ -144,7 +144,7 @@ with hcol:
 
 # 7. Mission Calculations
 
-w, h      = RESOLUTIONS[res_sel]
+w, h      = Resolutions[res_sel]
 bits      = bpp(fmt_sel, jpeg_q)
 img_bytes = w * h * bits
 img_mb    = img_bytes / (1024 ** 2)
