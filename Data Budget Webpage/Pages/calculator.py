@@ -16,10 +16,24 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer,
+    Table,
+    TableStyle,
+)
+
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from reportlab.lib.units import inch
+from io import BytesIO
+
 # 2. Force to select a cam
 
-# if "cam_selected" not in st.session_state:
-#  st.switch("app.py")
+if "cam_selected" not in st.session_state:
+    st.switch_page("app.py")
 
 # 3. CSS (Style)
 
@@ -30,7 +44,7 @@ st.markdown("""
 [data-testid="stSidebarNav"] { display: none; }
 
 .stApp {
-    background-color: #f5f7f5;
+    background-color: #0E1117;
 }
 
 .block-container {
@@ -43,7 +57,7 @@ st.markdown("""
 .main-title{
     font-size: 2rem;
     font-weight: 700;
-    color: #111;
+    color: #FAFAFA;
     margin-bottom: 1rem;
 }
 
@@ -76,7 +90,7 @@ div[data-testid="stNumberInput"] > div{
 }
 
 .metric-card{
-    background:#e6e6e6;
+    background:#1C1F26;
     border-radius:20px;
     padding:1rem;
     text-align:center;
@@ -84,19 +98,19 @@ div[data-testid="stNumberInput"] > div{
 
 .metric-label{
     font-size:0.9rem;
-    color:#333;
+    color:#C9D1D9;
     margin-bottom:0.5rem;
 }
 
 .metric-value{
     font-size:2rem;
     font-weight:700;
-    color:#111;
+    color:#1E88E5;
 }
 
 .metric-unit{
     font-size:0.9rem;
-    color:#555;
+    color:#9CA3AF;
 }
 
 
@@ -108,7 +122,7 @@ div[data-testid="stNumberInput"] > div{
 
 
 .config-box{
-    background:#eef3ef;
+    background:#1C1F26;
     padding:1rem;
     border-radius:10px;
     height:100%;
@@ -128,7 +142,7 @@ left, right = st.columns(2)
 
   # 3. Header
 
-#cam_name = st.session_state["cam_selected"]
+cam_sel = st.session_state["cam_selected"]
 
 hcol, bcol = st.columns((6,1))
 with hcol:
@@ -136,9 +150,9 @@ with hcol:
     "<div class='main-title'>Data Budget Calculator</div>",
     unsafe_allow_html=True
 )
-#with bcol:
-    # if st.button("← Volver", use_container_width=True):
-    #    st.switch_page("app.py")
+with bcol:
+    if st.button("← Volver", use_container_width=True):
+        st.switch_page("app.py")
 
 # 4. Variables definition
 
@@ -182,7 +196,7 @@ orbits_day = st.number_input(
 mission_days = st.number_input(
     "Mission days",
     min_value=1,
-    value=30
+    value=20
 )
 
 stor_gb = st.number_input(
@@ -190,10 +204,6 @@ stor_gb = st.number_input(
     min_value=1,
     value=32
 )
-
-#cam_sel = cam_name
-
-
 
 CAM_INFO = {
     "OpenMV Cam H7 Plus": {
@@ -212,12 +222,7 @@ CAM_INFO = {
     },
 }
 
-#cam_sel = st.selectbox(
-#    "Camera",
-#    list(CAM_INFO.keys())
-#)
-
-# c = CAM_INFO[cam_sel]
+c = CAM_INFO[cam_sel]
 
 # 5. Helpers
 
@@ -312,7 +317,7 @@ fmt_label = {
 }[fmt_sel]
 
 res_short = res_sel.split("—")[0].strip()
-#c = CAM_INFO[cam_sel]
+c = CAM_INFO[cam_sel]
 
 rows = [
     # ("Camera",             cam_sel),
@@ -354,5 +359,70 @@ st.download_button(
     data=csv_bytes,
     file_name=filename,
     mime="text/csv",
+    use_container_width=True,
+)
+
+# 11. PDF (Technical Report)
+
+
+def build_pdf():
+    
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer)
+    styles = getSampleStyleSheet()
+    # elements is a list that will hold the content of the PDF
+    elements = []
+
+    title = Paragraph(
+        "<b><font color='#1E88E5' size=18>"
+        "Payload-MILO Data Budget Report"
+        "</font></b>",
+        styles["Heading1"],
+    )
+
+    elements.append(title)
+    elements.append(Spacer(1, 0.25 * inch))
+
+    data = [
+        ["Parameter", "Value"],
+    ]
+    
+    for k, v in rows:
+        data.append([str(k), str(v)])
+
+    table = Table(data, colWidths=[180, 280])
+
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#1E88E5")),
+        ("TEXTCOLOR",(0,0),(-1,0),colors.white),
+
+        ("FONTNAME",(0,0),(-1,0),"Helvetica-Bold"),
+
+        ("GRID",(0,0),(-1,-1),0.5,colors.grey),
+
+        ("BACKGROUND",(0,1),(-1,-1),colors.whitesmoke),
+
+        ("BOTTOMPADDING",(0,0),(-1,0),10),
+
+        ("TOPPADDING",(0,1),(-1,-1),8),
+
+        ("BOTTOMPADDING",(0,1),(-1,-1),8),
+    ]))
+
+    elements.append(table)
+    elements.append(Spacer(1,0.3*inch))
+
+    doc.build(elements)
+    pdf = buffer.getvalue()
+    buffer.close()
+    return pdf
+
+pdf = build_pdf()
+
+st.download_button(
+    "📄 Download Technical Report (PDF)",
+    data=pdf,
+    file_name=f"MILO_DataBudget_{cam_sel}.pdf",
+    mime="application/pdf",
     use_container_width=True,
 )
