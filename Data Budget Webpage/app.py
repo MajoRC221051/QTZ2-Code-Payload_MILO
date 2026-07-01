@@ -22,12 +22,23 @@ st.markdown("""
                 </style>
             """, unsafe_allow_html=True)
 
-from pathlib import Path
+import streamlit as st
 
-BASE_DIR = Path(__file__).resolve().parent
-LOGO = BASE_DIR / "logo-lab.png"
+col1, col2, col3, col4 = st.columns([1,1,1,1])
 
-st.image(str(LOGO))
+with col1:
+    st.image("logo_uvg.png", width=70)
+
+with col2:
+    st.image("logo_milo.png", width=110)
+
+with col3:
+    st.image("logo_mecanica.png", width=90)
+
+with col4:
+    st.image("logo-lab.png", width=70)
+
+st.title(":blue[Payload-MILO] Data Budget Calculator")
 
 st.sidebar.title("Payload-MILO Data Budget Calculator")
 st.title(" :blue[Payload-MILO] Data Budget Calculator", text_alignment="center")
