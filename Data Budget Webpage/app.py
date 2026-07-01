@@ -43,8 +43,6 @@ with col3:
 with col4:
     st.image(BASE_DIR / "logo-lab.png", width=60)
 
-st.title(":blue[Payload-MILO] Data Budget Calculator")
-
 st.sidebar.title("Payload-MILO Data Budget Calculator")
 st.title(" :blue[Payload-MILO] Data Budget Calculator", text_alignment="center")
 
