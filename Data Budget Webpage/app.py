@@ -89,5 +89,5 @@ with col2:
     st.markdown('<div class="component-card">', unsafe_allow_html=True)
     if st.button("OpenMV Cam H7 Plus"):
         st.session_state["cam_selected"] = "OpenMV Cam H7 Plus"
-        st.switch_page("pages/calculator.py")
+        st.switch_page("calculator.py")
     st.markdown('</div>', unsafe_allow_html=True)
