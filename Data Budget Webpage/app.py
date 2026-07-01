@@ -22,7 +22,13 @@ st.markdown("""
                 </style>
             """, unsafe_allow_html=True)
 
-st.image("logo-lab.png")
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+LOGO = BASE_DIR / "logo-lab.png"
+
+st.image(str(LOGO))
+
 st.sidebar.title("Payload-MILO Data Budget Calculator")
 st.title(" :blue[Payload-MILO] Data Budget Calculator", text_alignment="center")
 
