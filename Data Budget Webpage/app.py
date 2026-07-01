@@ -22,7 +22,7 @@ st.markdown("""
                 </style>
             """, unsafe_allow_html=True)
 
-st.logo("logo-lab.png", size="large")
+st.image("logo-lab.png")
 st.sidebar.title("Payload-MILO Data Budget Calculator")
 st.title(" :blue[Payload-MILO] Data Budget Calculator", text_alignment="center")
 
