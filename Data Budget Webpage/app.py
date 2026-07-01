@@ -147,7 +147,7 @@ def render_calculator():
     [data-testid="stSidebarNav"] { display: none; }
 
     .stApp {
-        background-color: #0E1117;
+        background-color: #FFFFFF;
     }
 
     .block-container {
@@ -155,27 +155,44 @@ def render_calculator():
         max-width: 1200px;
     }
 
-
-
     .main-title{
         font-size: 2rem;
         font-weight: 700;
-        color: #FAFAFA;
+        color: #1E293B;
         margin-bottom: 1rem;
     }
 
+    .panel-box{
+        background:#EAF7EF;
+        border-radius:18px;
+        padding:1.3rem 1.5rem;
+        height:100%;
+    }
 
+    .panel-title{
+        font-size:1.1rem;
+        font-weight:700;
+        color:#1E293B;
+        margin-bottom:1rem;
+    }
 
     div[data-testid="stSelectbox"],
-    div[data-testid="stNumberInput"]{
-        margin-bottom: 0.6rem;
+    div[data-testid="stNumberInput"],
+    div[data-testid="stSlider"]{
+        margin-bottom: 0.8rem;
+    }
+
+    div[data-testid="stSelectbox"] label,
+    div[data-testid="stSlider"] label{
+        color:#1E293B !important;
+        font-weight:600;
     }
 
     div[data-testid="stSelectbox"] > div,
     div[data-testid="stNumberInput"] > div{
         border-radius: 10px;
+        background-color:#FFFFFF;
     }
-
 
     .stNumberInput input{
         text-align:center;
@@ -183,32 +200,30 @@ def render_calculator():
         font-weight:600;
     }
 
-
-
     .metric-grid{
         display:grid;
         grid-template-columns: repeat(4, 1fr);
         gap:1rem;
-        margin-top:1rem;
+        margin-top:1.5rem;
     }
 
     .metric-card{
-        background:#1C1F26;
+        background:#F1F3F5;
         border-radius:20px;
-        padding:1rem;
+        padding:1.2rem;
         text-align:center;
     }
 
     .metric-label{
         font-size:0.9rem;
-        color:#C9D1D9;
+        color:#6B7280;
         margin-bottom:0.5rem;
     }
 
     .metric-value{
         font-size:2rem;
         font-weight:700;
-        color:#1E88E5;
+        color:#1E293B;
     }
 
     .metric-unit{
@@ -216,19 +231,8 @@ def render_calculator():
         color:#9CA3AF;
     }
 
-
-
     .stContainer{
         border-radius:15px;
-    }
-
-
-
-    .config-box{
-        background:#1C1F26;
-        padding:1rem;
-        border-radius:10px;
-        height:100%;
     }
 
     .section-title{
@@ -270,45 +274,6 @@ def render_calculator():
 
     Formats = ["RGB565", "Grayscale", "JPEG (Compressed)"] # Image format
 
-    res_sel = st.selectbox(
-        "Resolution",
-        list(Resolutions.keys())
-    )
-
-    fmt_sel = st.selectbox(
-        "Format",
-        Formats
-    )
-
-    jpeg_q = st.slider(
-        "JPEG Quality",
-        10, 100, 80
-    )
-
-    imgs_orbit = st.number_input(
-        "Images per orbit",
-        min_value=1,
-        value=10
-    )
-
-    orbits_day = st.number_input(
-        "Orbits per day",
-        min_value=1,
-        value=15
-    )
-
-    mission_days = st.number_input(
-        "Mission days",
-        min_value=1,
-        value=20
-    )
-
-    stor_gb = st.number_input(
-        "Storage (GB)",
-        min_value=1,
-        value=32
-    )
-
     CAM_INFO = {
         "OpenMV Cam H7 Plus": {
             "proc":  "STM32H743II @ 480 MHz",
@@ -325,6 +290,60 @@ def render_calculator():
             "usb":   "USB-C 480 Mb/s",
         },
     }
+
+    col_cam, col_mission = st.columns(2)
+
+    with col_cam:
+        st.markdown('<div class="panel-box">', unsafe_allow_html=True)
+        st.markdown('<div class="panel-title">📷 Camera Configuration</div>', unsafe_allow_html=True)
+
+        cam_sel = st.selectbox(
+            "Camera",
+            list(CAM_INFO.keys()),
+            index=list(CAM_INFO.keys()).index(cam_sel) if cam_sel in CAM_INFO else 0
+        )
+        st.session_state["cam_selected"] = cam_sel
+
+        fmt_sel = st.selectbox(
+            "Image Format",
+            Formats
+        )
+
+        res_sel = st.selectbox(
+            "Resolution",
+            list(Resolutions.keys())
+        )
+
+        jpeg_q = st.slider(
+            "JPEG Quality",
+            10, 100, 80
+        )
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with col_mission:
+        st.markdown('<div class="panel-box">', unsafe_allow_html=True)
+        st.markdown('<div class="panel-title">🛰️ Mission Parameters</div>', unsafe_allow_html=True)
+
+        imgs_orbit = st.slider(
+            "Images per orbit",
+            1, 100, 10
+        )
+
+        orbits_day = st.slider(
+            "Orbits per day",
+            1, 30, 15
+        )
+
+        mission_days = st.slider(
+            "Mission duration (days)",
+            1, 365, 20
+        )
+
+        stor_gb = st.slider(
+            "Available storage (GB)",
+            1, 128, 32
+        )
+        st.markdown('</div>', unsafe_allow_html=True)
 
     c = CAM_INFO[cam_sel]
 
@@ -376,23 +395,19 @@ def render_calculator():
     <div class="metric-grid">
         <div class="metric-card">
             <div class="metric-label">Image Size</div>
-            <div class="metric-value">{img_v}</div>
-            <div class="metric-unit">{img_u}</div>
+            <div class="metric-value">{img_v}<span class="metric-unit">{img_u}</span></div>
         </div>
         <div class="metric-card">
-            <div class="metric-label">Data per QZ2 Orbit</div>
-            <div class="metric-value">{orb_v}</div>
-            <div class="metric-unit">{orb_u}</div>
+            <div class="metric-label">Data per Orbit</div>
+            <div class="metric-value">{orb_v}<span class="metric-unit">{orb_u}</span></div>
         </div>
         <div class="metric-card">
-            <div class="metric-label">Data per QZ2 Day</div>
-            <div class="metric-value">{day_v}</div>
-            <div class="metric-unit">{day_u}</div>
+            <div class="metric-label">Data per Day</div>
+            <div class="metric-value">{day_v}<span class="metric-unit">{day_u}</span></div>
         </div>
         <div class="metric-card">
-            <div class="metric-label">MILO´s Mission Total</div>
-            <div class="metric-value">{tot_v}</div>
-            <div class="metric-unit">{tot_u}</div>
+            <div class="metric-label">Mission Total</div>
+            <div class="metric-value">{tot_v}<span class="metric-unit">{tot_u}</span></div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -401,9 +416,9 @@ def render_calculator():
 
     with st.container(border=True):
         ca, cb = st.columns(2)
-        ca.markdown(f"**{tot_v} {tot_u}** usados")
+        ca.markdown(f"**{tot_v} {tot_u}** used")
         cb.markdown(
-            f"<div style='text-align:right'>de {stor_gb} GB Available</div>",
+            f"<div style='text-align:right'>of {stor_gb} GB available</div>",
             unsafe_allow_html=True,
         )
         st.markdown(storage_bar_html(pct, over), unsafe_allow_html=True)
