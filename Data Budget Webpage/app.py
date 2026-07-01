@@ -108,9 +108,9 @@ def render_home():
             st.image(BASE_DIR / "logo-lab.png", width=60)
     st.sidebar.title("Payload-MILO Data Budget Calculator")
     st.markdown("<div class='hero-title'>Payload-MILO Data Budget Calculator</div>", unsafe_allow_html=True)
-    st.markdown("<div class='hero-subtitle'>Herramienta para el cálculo del presupuesto de datos del payload</div>", unsafe_allow_html=True)
+    st.markdown("<div class='hero-subtitle'>Tool for calculating the payload's data budget</div>", unsafe_allow_html=True)
     st.divider()
-    st.markdown("<div class='section-label'>Seleccione el componente</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-label'>Select the component</div>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
         with st.container(key="card_rt1062"):
@@ -260,7 +260,7 @@ def render_calculator():
         unsafe_allow_html=True
     )
     with bcol:
-        if st.button("← Volver", use_container_width=True):
+        if st.button("← Back", use_container_width=True):
             st.session_state["view"] = "home"
             st.rerun()
 
@@ -427,11 +427,11 @@ def render_calculator():
         )
         st.markdown(storage_bar_html(pct, over), unsafe_allow_html=True)
         if over:
-            st.error("⚠ The total surpases the available storage. Reduce images or change format")
+            st.error("⚠ The total exceeds the available storage. Reduce images or change format")
         else:
             st.caption(f"{pct:.1f}% used")
 
-    # 10. CSV (Techanical resumé)
+    # 10. CSV (Technical summary)
 
     fmt_label = {
         "RGB565":            "RGB565 (2 bpp)",
@@ -446,18 +446,18 @@ def render_calculator():
         # ("Camera",             cam_sel),
         ("Processor",         c["proc"]),
         ("RAM / Flash",        f"{c['ram']} / {c['flash']}"),
-        ("Vel. uSD",           c["usd"]),
+        ("SD Speed",           c["usd"]),
         ("USB Interface",       c["usb"]),
         ("Resolution",         f"{res_short} ({w}x{h})"),
         ("Format",            fmt_label),
         ("Pixels per image",  f"{w*h}"),
         ("Bytes per image",   f"{int(img_bytes)} B"),
-        ("Size per imagen",  f"{img_v} {img_u}"),
+        ("Size per image",  f"{img_v} {img_u}"),
         ("Images/orbit",    imgs_orbit),
         ("Data/orbit",       f"{orb_v} {orb_u}"),
         ("Orbits/day",        orbits_day),
         ("Data/day",          f"{day_v} {day_u}"),
-        ("Days/mision",     mission_days),
+        ("Mission days",     mission_days),
         ("Generated Total",     f"{tot_v} {tot_u}"),
         ("Available Storage", f"{stor_gb} GB"),
         ("Usage",        f"{pct:.1f}%"),
@@ -467,18 +467,18 @@ def render_calculator():
     def build_csv(rows: list) -> bytes:
         buf = io.StringIO()
         writer = csv.writer(buf)
-        writer.writerow(["Parámetro", "Valor"])
+        writer.writerow(["Parameter", "Value"])
         writer.writerow(["Payload-MILO Data Budget — Quetzal-2", ""])
         writer.writerow([])
         for k, v in rows:
             writer.writerow([k, v])
-        return buf.getvalue().encode("utf-8-sig")   # utf-8-sig abre bien en Excel
+        return buf.getvalue().encode("utf-8-sig")   # utf-8-sig opens correctly in Excel
 
     csv_bytes = build_csv(rows)
     filename  = f"MILO_DataBudget_{cam_sel.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M')}.csv"
 
     st.download_button(
-        label="📥 Imprimir desglose técnico (CSV)",
+        label="📥 Print Technical Breakdown (CSV)",
         data=csv_bytes,
         file_name=filename,
         mime="text/csv",
