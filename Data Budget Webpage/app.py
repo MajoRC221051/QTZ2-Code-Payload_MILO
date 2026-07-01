@@ -262,7 +262,6 @@ def render_calculator():
     hcol, bcol = st.columns((6,1))
     with hcol:
         st.markdown(
-        "<div class='main-title'>Data Budget Calculator</div>",
         unsafe_allow_html=True
     )
     with bcol:
