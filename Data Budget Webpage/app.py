@@ -24,19 +24,24 @@ st.markdown("""
 
 
 
-col1, col2, col3, col4 = st.columns([1,1,1,1])
+from pathlib import Path
+import streamlit as st
+
+BASE_DIR = Path(__file__).resolve().parent
+
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.image("logo_uvg.png", width=70)
+    st.image(BASE_DIR / "logo_uvg.png", width=60)
 
 with col2:
-    st.image("logo_milo.png", width=110)
+    st.image(BASE_DIR / "logo_milo.png", width=120)
 
 with col3:
-    st.image("logo_mecanica.png", width=90)
+    st.image(BASE_DIR / "logo_mecanica.png", width=90)
 
 with col4:
-    st.image("logo-lab.png", width=70)
+    st.image(BASE_DIR / "logo-lab.png", width=60)
 
 st.title(":blue[Payload-MILO] Data Budget Calculator")
 
