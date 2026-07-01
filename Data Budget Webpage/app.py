@@ -54,11 +54,11 @@ col1, col2 = st.columns(2)
 with col1:
     if st.button("OpenMV Cam RT1062"):
         st.session_state["cam_selected"] = "OpenMV Cam RT1062"
-        st.switch_page("Pages/calculator.py")
+        st.switch_page("pages/calculator.py")
 with col2:
     if st.button("OpenMV Cam H7 Plus"):
         st.session_state["cam_selected"] = "OpenMV Cam H7 Plus"
-        st.switch_page("Pages/calculator.py")
+        st.switch_page("pages/calculator.py")
 
 
 
