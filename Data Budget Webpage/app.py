@@ -162,11 +162,11 @@ def render_calculator():
         margin-bottom: 1rem;
     }
 
-    .panel-box{
-        background:#EAF7EF;
-        border-radius:18px;
-        padding:1.3rem 1.5rem;
-        height:100%;
+    .st-key-camera_panel, .st-key-mission_panel {
+        background-color: #EAF7EF;
+        border-radius: 18px;
+        padding: 1.3rem 1.5rem 0.5rem 1.5rem;
+        margin-bottom: 1rem;
     }
 
     .panel-title{
@@ -179,10 +179,11 @@ def render_calculator():
     div[data-testid="stSelectbox"],
     div[data-testid="stNumberInput"],
     div[data-testid="stSlider"]{
-        margin-bottom: 0.8rem;
+        margin-bottom: 0.2rem;
     }
 
     div[data-testid="stSelectbox"] label,
+    div[data-testid="stNumberInput"] label,
     div[data-testid="stSlider"] label{
         color:#1E293B !important;
         font-weight:600;
@@ -198,6 +199,13 @@ def render_calculator():
         text-align:center;
         font-size:16px !important;
         font-weight:600;
+    }
+
+    .field-range{
+        font-size:0.78rem;
+        color:#6B7280;
+        margin-top:-0.6rem;
+        margin-bottom:1rem;
     }
 
     .metric-grid{
@@ -294,56 +302,58 @@ def render_calculator():
     col_cam, col_mission = st.columns(2)
 
     with col_cam:
-        st.markdown('<div class="panel-box">', unsafe_allow_html=True)
-        st.markdown('<div class="panel-title">📷 Camera Configuration</div>', unsafe_allow_html=True)
+        with st.container(key="camera_panel"):
+            st.markdown('<div class="panel-title">📷 Camera Configuration</div>', unsafe_allow_html=True)
 
-        cam_sel = st.selectbox(
-            "Camera",
-            list(CAM_INFO.keys()),
-            index=list(CAM_INFO.keys()).index(cam_sel) if cam_sel in CAM_INFO else 0
-        )
-        st.session_state["cam_selected"] = cam_sel
+            cam_sel = st.selectbox(
+                "Camera",
+                list(CAM_INFO.keys()),
+                index=list(CAM_INFO.keys()).index(cam_sel) if cam_sel in CAM_INFO else 0
+            )
+            st.session_state["cam_selected"] = cam_sel
 
-        fmt_sel = st.selectbox(
-            "Image Format",
-            Formats
-        )
+            fmt_sel = st.selectbox(
+                "Image Format",
+                Formats
+            )
 
-        res_sel = st.selectbox(
-            "Resolution",
-            list(Resolutions.keys())
-        )
+            res_sel = st.selectbox(
+                "Resolution",
+                list(Resolutions.keys())
+            )
 
-        jpeg_q = st.slider(
-            "JPEG Quality",
-            10, 100, 80
-        )
-        st.markdown('</div>', unsafe_allow_html=True)
+            jpeg_q = st.slider(
+                "JPEG Quality",
+                10, 100, 80
+            )
 
     with col_mission:
-        st.markdown('<div class="panel-box">', unsafe_allow_html=True)
-        st.markdown('<div class="panel-title">🛰️ Mission Parameters</div>', unsafe_allow_html=True)
+        with st.container(key="mission_panel"):
+            st.markdown('<div class="panel-title">🛰️ Mission Parameters</div>', unsafe_allow_html=True)
 
-        imgs_orbit = st.slider(
-            "Images per orbit",
-            1, 100, 10
-        )
+            imgs_orbit = st.number_input(
+                "Images per orbit",
+                min_value=1, max_value=100, value=10
+            )
+            st.markdown('<div class="field-range">Min: 1 — Max: 100</div>', unsafe_allow_html=True)
 
-        orbits_day = st.slider(
-            "Orbits per day",
-            1, 30, 15
-        )
+            orbits_day = st.number_input(
+                "Orbits per day",
+                min_value=1, max_value=30, value=15
+            )
+            st.markdown('<div class="field-range">Min: 1 — Max: 30</div>', unsafe_allow_html=True)
 
-        mission_days = st.slider(
-            "Mission duration (days)",
-            1, 365, 20
-        )
+            mission_days = st.number_input(
+                "Mission duration (days)",
+                min_value=1, max_value=365, value=20
+            )
+            st.markdown('<div class="field-range">Min: 1 — Max: 365</div>', unsafe_allow_html=True)
 
-        stor_gb = st.slider(
-            "Available storage (GB)",
-            1, 128, 32
-        )
-        st.markdown('</div>', unsafe_allow_html=True)
+            stor_gb = st.number_input(
+                "Available storage (GB)",
+                min_value=1, max_value=128, value=32
+            )
+            st.markdown('<div class="field-range">Min: 1 — Max: 128</div>', unsafe_allow_html=True)
 
     c = CAM_INFO[cam_sel]
 
