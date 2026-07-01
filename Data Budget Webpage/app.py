@@ -58,13 +58,12 @@ def render_home():
                             transform: scale(1.05);
                         }
                         .stApp {
-                            background: linear-gradient(180deg, #F5F9FF 0%, #FFFFFF 35%);
-                        }
-                        .logo-card {
                             background-color: #FFFFFF;
+                        }
+                        .st-key-logo_card {
+                            background-color: #F1F3F5;
                             border-radius: 16px;
                             padding: 1.2rem 1rem;
-                            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
                             margin-bottom: 2rem;
                         }
                         .hero-title {
@@ -88,27 +87,25 @@ def render_home():
                             font-size: 1.3rem;
                             margin-bottom: 1.2rem;
                         }
-                        .component-card {
-                            background-color: #FFFFFF;
+                        .st-key-card_rt1062, .st-key-card_h7plus {
+                            background-color: #EAF7EF;
                             border-radius: 14px;
                             padding: 1.5rem 1rem 1rem 1rem;
-                            box-shadow: 0 4px 14px rgba(0,0,0,0.07);
                             text-align: center;
                             margin-bottom: 0.5rem;
                         }
                     </style>
                 """, unsafe_allow_html=True)
-    st.markdown('<div class="logo-card">', unsafe_allow_html=True)
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.image(BASE_DIR / "logo_uvg.png", width=60)
-    with col2:
-        st.image(BASE_DIR / "logo_milo.png", width=120)
-    with col3:
-        st.image(BASE_DIR / "logo_mecanica.png", width=90)
-    with col4:
-        st.image(BASE_DIR / "logo-lab.png", width=60)
-    st.markdown('</div>', unsafe_allow_html=True)
+    with st.container(key="logo_card"):
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.image(BASE_DIR / "logo_uvg.png", width=60)
+        with col2:
+            st.image(BASE_DIR / "logo_milo.png", width=120)
+        with col3:
+            st.image(BASE_DIR / "logo_mecanica.png", width=90)
+        with col4:
+            st.image(BASE_DIR / "logo-lab.png", width=60)
     st.sidebar.title("Payload-MILO Data Budget Calculator")
     st.markdown("<div class='hero-title'>Payload-MILO Data Budget Calculator</div>", unsafe_allow_html=True)
     st.markdown("<div class='hero-subtitle'>Herramienta para el cálculo del presupuesto de datos del payload</div>", unsafe_allow_html=True)
@@ -116,19 +113,17 @@ def render_home():
     st.markdown("<div class='section-label'>Seleccione el componente</div>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown('<div class="component-card">', unsafe_allow_html=True)
-        if st.button("OpenMV Cam RT1062"):
-            st.session_state["cam_selected"] = "OpenMV Cam RT1062"
-            st.session_state["view"] = "calculator"
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(key="card_rt1062"):
+            if st.button("OpenMV Cam RT1062"):
+                st.session_state["cam_selected"] = "OpenMV Cam RT1062"
+                st.session_state["view"] = "calculator"
+                st.rerun()
     with col2:
-        st.markdown('<div class="component-card">', unsafe_allow_html=True)
-        if st.button("OpenMV Cam H7 Plus"):
-            st.session_state["cam_selected"] = "OpenMV Cam H7 Plus"
-            st.session_state["view"] = "calculator"
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(key="card_h7plus"):
+            if st.button("OpenMV Cam H7 Plus"):
+                st.session_state["cam_selected"] = "OpenMV Cam H7 Plus"
+                st.session_state["view"] = "calculator"
+                st.rerun()
 
 
 # ==================================================================
@@ -252,7 +247,6 @@ def render_calculator():
     </style>
     """, unsafe_allow_html=True)
 
-    st.title("Data Budget Calculator")
     left, right = st.columns(2)
 
       # 3. Header
@@ -262,11 +256,11 @@ def render_calculator():
     hcol, bcol = st.columns((6,1))
     with hcol:
         st.markdown(
-                "<div class='main-title'>Data Budget Calculator</div>",
+        "<div class='main-title'>Data Budget Calculator</div>",
         unsafe_allow_html=True
     )
     with bcol:
-        if st.button("← Back", use_container_width=True):
+        if st.button("← Volver", use_container_width=True):
             st.session_state["view"] = "home"
             st.rerun()
 
