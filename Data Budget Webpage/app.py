@@ -33,39 +33,144 @@ if "view" not in st.session_state:
 if "cam_selected" not in st.session_state:
     st.session_state["cam_selected"] = None
 
+if "prev_view" not in st.session_state:
+    st.session_state["prev_view"] = "home"
+
+
+# ==================================================================
+# ESTILOS COMPARTIDOS (botones, tarjetas, layout general)
+# ==================================================================
+def inject_global_css():
+    st.markdown("""
+        <style>
+
+            /* ---------- Botones (look profesional) ---------- */
+            .stButton>button {
+                background: linear-gradient(180deg, #2196F3 0%, #1565C0 100%);
+                color: #FFFFFF;
+                border: none;
+                width: 100%;
+                padding: 0.75rem 1.2rem;
+                font-size: 15px;
+                font-weight: 600;
+                letter-spacing: 0.2px;
+                border-radius: 10px;
+                box-shadow: 0 2px 6px rgba(21, 101, 192, 0.35);
+                transition: all 0.18s ease-in-out;
+            }
+            .stButton>button:hover {
+                background: linear-gradient(180deg, #1E88E5 0%, #0D47A1 100%);
+                box-shadow: 0 4px 10px rgba(13, 71, 161, 0.45);
+                transform: translateY(-1px);
+                color: #FFFFFF;
+                border: none;
+            }
+            .stButton>button:active {
+                transform: translateY(0px);
+                box-shadow: 0 2px 4px rgba(13, 71, 161, 0.35);
+            }
+            .stButton>button:focus:not(:active) {
+                color: #FFFFFF;
+                border: none;
+                box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.35);
+            }
+
+            /* Botones secundarios, ej. Back / About */
+            .secondary-btn .stButton>button {
+                background: #FFFFFF;
+                color: #1565C0;
+                border: 1.5px solid #BBDEFB;
+                box-shadow: none;
+                white-space: nowrap;
+            }
+            .secondary-btn .stButton>button:hover {
+                background: #E3F2FD;
+                border: 1.5px solid #90CAF9;
+                color: #0D47A1;
+                box-shadow: none;
+                transform: none;
+            }
+
+            /* Botones de descarga */
+            .stDownloadButton>button {
+                background: #FFFFFF;
+                color: #1565C0;
+                border: 1.5px solid #BBDEFB;
+                width: 100%;
+                padding: 0.75rem 1.2rem;
+                font-size: 15px;
+                font-weight: 600;
+                border-radius: 10px;
+                transition: all 0.18s ease-in-out;
+            }
+            .stDownloadButton>button:hover {
+                background: #1565C0;
+                color: #FFFFFF;
+                border: 1.5px solid #1565C0;
+                transform: translateY(-1px);
+            }
+
+            .stApp {
+                background-color: #FFFFFF;
+            }
+
+        </style>
+    """, unsafe_allow_html=True)
+
+
+def render_logo_row():
+    st.markdown("""
+        <style>
+            .st-key-logo_card {
+                background-color: #F1F3F5;
+                border-radius: 16px;
+                padding: 1rem 1.5rem;
+                margin-bottom: 2rem;
+            }
+            /* Todas las imagenes del bloque de logos comparten la misma altura
+               y se alinean verticalmente al centro, sin importar su proporcion */
+            .st-key-logo_card [data-testid="stHorizontalBlock"] {
+                align-items: center;
+            }
+            .st-key-logo_card [data-testid="column"] {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .st-key-logo_card [data-testid="stImage"] {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+            }
+            .st-key-logo_card [data-testid="stImage"] img {
+                height: 48px;
+                width: auto;
+                max-width: 100%;
+                object-fit: contain;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    with st.container(key="logo_card"):
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.image(str(BASE_DIR / "logo_uvg.png"))
+        with col2:
+            st.image(str(BASE_DIR / "logo_milo.png"))
+        with col3:
+            st.image(str(BASE_DIR / "logo_mecanica.png"))
+        with col4:
+            st.image(str(BASE_DIR / "logo-lab.png"))
+
 
 # ==================================================================
 # VENTANA 1: HOME
 # ==================================================================
 def render_home():
+    inject_global_css()
     st.markdown("""
                     <style>
-                        
-                        .stButton>button {
-                            background-color: #1E88E5;
-                            color: white;
-                            border: none;
-                            width: 100%;
-                            
-                            
-                            padding: 0.9rem 1.2rem;
-                            font-size: 16px;
-                            border-radius: 10px;
-                            transition:0.2s;
-                        }
-                        .stButton>button:hover {
-                            background-color: #1565C0;
-                            transform: scale(1.05);
-                        }
-                        .stApp {
-                            background-color: #FFFFFF;
-                        }
-                        .st-key-logo_card {
-                            background-color: #F1F3F5;
-                            border-radius: 16px;
-                            padding: 1.2rem 1rem;
-                            margin-bottom: 2rem;
-                        }
                         .hero-title {
                             text-align: center;
                             color: #0D47A1;
@@ -96,17 +201,20 @@ def render_home():
                         }
                     </style>
                 """, unsafe_allow_html=True)
-    with st.container(key="logo_card"):
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.image(BASE_DIR / "logo_uvg.png", width=60)
-        with col2:
-            st.image(BASE_DIR / "logo_milo.png", width=120)
-        with col3:
-            st.image(BASE_DIR / "logo_mecanica.png", width=90)
-        with col4:
-            st.image(BASE_DIR / "logo-lab.png", width=60)
+
+    render_logo_row()
+
     st.sidebar.title("Payload-MILO Data Budget Calculator")
+
+    top_l, top_r = st.columns((6, 1))
+    with top_r:
+        st.markdown('<div class="secondary-btn">', unsafe_allow_html=True)
+        if st.button("ℹ️ About", use_container_width=True):
+            st.session_state["prev_view"] = "home"
+            st.session_state["view"] = "about"
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
     st.markdown("<div class='hero-title'>Payload-MILO Data Budget Calculator</div>", unsafe_allow_html=True)
     st.markdown("<div class='hero-subtitle'>Tool for calculating the payload's data budget</div>", unsafe_allow_html=True)
     st.divider()
@@ -132,6 +240,8 @@ def render_home():
 def render_calculator():
 
     # //......Data Budget Calculator Window ........
+
+    inject_global_css()
 
     # 3. CSS (Style)
 
@@ -208,6 +318,7 @@ def render_calculator():
         grid-template-columns: repeat(4, 1fr);
         gap:1rem;
         margin-top:1.5rem;
+        margin-bottom: 1.5rem;
     }
 
     .metric-card{
@@ -244,25 +355,50 @@ def render_calculator():
         margin-bottom:1rem;
     }
 
+    /* Header con boton Back / About: evita que el texto se corte */
+    div[data-testid="column"] .secondary-btn .stButton>button{
+        min-width: 100px;
+        white-space: nowrap;
+        padding-left: 0.8rem;
+        padding-right: 0.8rem;
+    }
+
+    /* Barra de almacenamiento tipo "slider" */
+    .stor-bar-track{
+        width:100%;
+        height:14px;
+        background:#EDEFF2;
+        border-radius:7px;
+        overflow:hidden;
+        margin: 0.6rem 0 0.3rem 0;
+    }
+
     </style>
     """, unsafe_allow_html=True)
 
-    left, right = st.columns(2)
-
-      # 3. Header
+    # 3. Header
 
     cam_sel = st.session_state["cam_selected"]
 
-    hcol, bcol = st.columns((6,1))
+    hcol, bcol1, bcol2 = st.columns((5, 1, 1))
     with hcol:
         st.markdown(
         "<div class='main-title'>Data Budget Calculator</div>",
         unsafe_allow_html=True
     )
-    with bcol:
+    with bcol1:
+        st.markdown('<div class="secondary-btn">', unsafe_allow_html=True)
+        if st.button("ℹ️ About", use_container_width=True):
+            st.session_state["prev_view"] = "calculator"
+            st.session_state["view"] = "about"
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    with bcol2:
+        st.markdown('<div class="secondary-btn">', unsafe_allow_html=True)
         if st.button("← Back", use_container_width=True):
             st.session_state["view"] = "home"
             st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
     # 4. Variables definition
 
@@ -416,9 +552,10 @@ def render_calculator():
     </div>
     """, unsafe_allow_html=True)
 
-    # 9. Storage bar
+    # 9. Storage bar + slider
 
     with st.container(border=True):
+        st.markdown('<div class="panel-title" style="margin-bottom:0.4rem;">💾 Storage usage</div>', unsafe_allow_html=True)
         ca, cb = st.columns(2)
         ca.markdown(f"**{tot_v} {tot_u}** used")
         cb.markdown(
@@ -430,6 +567,18 @@ def render_calculator():
             st.error("⚠ The total exceeds the available storage. Reduce images or change format")
         else:
             st.caption(f"{pct:.1f}% used")
+
+        # Slider adicional (solo lectura visual) que muestra el nivel de memoria usado
+        st.slider(
+            "Memory used (%)",
+            min_value=0.0,
+            max_value=100.0,
+            value=float(min(pct, 100.0)),
+            disabled=True,
+            format="%.1f%%",
+        )
+
+    st.markdown("<div style='height:0.6rem'></div>", unsafe_allow_html=True)
 
     # 10. CSV (Technical summary)
 
@@ -477,13 +626,15 @@ def render_calculator():
     csv_bytes = build_csv(rows)
     filename  = f"MILO_DataBudget_{cam_sel.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M')}.csv"
 
-    st.download_button(
-        label="📥 Print Technical Breakdown (CSV)",
-        data=csv_bytes,
-        file_name=filename,
-        mime="text/csv",
-        use_container_width=True,
-    )
+    dl1, dl2 = st.columns(2)
+    with dl1:
+        st.download_button(
+            label="📥 Print Technical Breakdown (CSV)",
+            data=csv_bytes,
+            file_name=filename,
+            mime="text/csv",
+            use_container_width=True,
+        )
 
     # 11. PDF (Technical Report)
 
@@ -542,13 +693,180 @@ def render_calculator():
 
     pdf = build_pdf()
 
-    st.download_button(
-        "📄 Download Technical Report (PDF)",
-        data=pdf,
-        file_name=f"MILO_DataBudget_{cam_sel}.pdf",
-        mime="application/pdf",
-        use_container_width=True,
+    with dl2:
+        st.download_button(
+            "📄 Download Technical Report (PDF)",
+            data=pdf,
+            file_name=f"MILO_DataBudget_{cam_sel}.pdf",
+            mime="application/pdf",
+            use_container_width=True,
+        )
+
+
+# ==================================================================
+# VENTANA 3: ABOUT
+# ==================================================================
+def render_about():
+    inject_global_css()
+
+    st.markdown("""
+        <style>
+        [data-testid="stSidebar"] { display: none; }
+        [data-testid="stSidebarNav"] { display: none; }
+        .about-title{
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1E293B;
+            margin-bottom: 0.2rem;
+        }
+        .about-subtitle{
+            color:#6B7280;
+            font-size:1rem;
+            margin-bottom:1.2rem;
+        }
+        .about-card{
+            background-color:#F8F9FA;
+            border-radius:16px;
+            padding:1.4rem 1.6rem;
+            margin-bottom:1.2rem;
+        }
+        .about-card h4{
+            color:#0D47A1;
+            margin-top:0;
+            margin-bottom:0.8rem;
+        }
+        .param-table{
+            width:100%;
+            border-collapse:collapse;
+        }
+        .param-table th{
+            text-align:left;
+            color:#1E293B;
+            font-size:0.85rem;
+            text-transform:uppercase;
+            letter-spacing:0.4px;
+            padding:0.5rem 0.6rem;
+            border-bottom:2px solid #E2E8F0;
+        }
+        .param-table td{
+            padding:0.55rem 0.6rem;
+            border-bottom:1px solid #EDF2F7;
+            font-size:0.92rem;
+            color:#1E293B;
+            vertical-align:top;
+        }
+        .param-table td.sym{
+            font-weight:700;
+            color:#1565C0;
+            white-space:nowrap;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    render_logo_row()
+
+    top_l, top_r = st.columns((6, 1))
+    with top_r:
+        st.markdown('<div class="secondary-btn">', unsafe_allow_html=True)
+        if st.button("← Back", use_container_width=True):
+            st.session_state["view"] = st.session_state.get("prev_view", "home")
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown("<div class='about-title'>About Payload-MILO Data Budget Calculator</div>", unsafe_allow_html=True)
+    st.markdown(
+        "<div class='about-subtitle'>What this tool is, how it works, and what each parameter means.</div>",
+        unsafe_allow_html=True,
     )
+
+    # ---- Que es la herramienta ----
+    with st.container():
+        st.markdown("""
+            <div class="about-card">
+                <h4>🛰️ What is this tool?</h4>
+                <p style="color:#334155; line-height:1.6;">
+                The <b>Payload-MILO Data Budget Calculator</b> is a support tool for the MILO payload team.
+                It estimates how much image data the onboard camera will generate during a mission and
+                compares that volume against the satellite's available on-board storage. This helps the
+                team choose a camera, image format, resolution and mission cadence that keep the data
+                budget within the storage limits of the platform.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    # ---- Metodologia (basada en la formulacion del payload) ----
+    with st.container():
+        st.markdown("""
+            <div class="about-card">
+                <h4>📐 Methodology</h4>
+                <p style="color:#334155; line-height:1.6; margin-bottom:0.8rem;">
+                The data budget is built up in stages: first the size of a single image, then the data
+                produced per orbit, per day, and finally over the full mission. The core relationships are:
+                </p>
+        """, unsafe_allow_html=True)
+
+        st.latex(r"N_{id} = N_{o} \times N_{io}")
+        st.latex(r"T_{id} = N_{id} \times \big[N_b \times (1+\alpha)\big]")
+
+        st.markdown("""
+                <table class="param-table">
+                    <tr><th>Symbol</th><th>Meaning</th></tr>
+                    <tr><td class="sym">I<sub>r</sub></td><td>Total image resolution (pixels).</td></tr>
+                    <tr><td class="sym">I<sub>b</sub></td><td>Image block / colour depth (RGB, grayscale, etc.).</td></tr>
+                    <tr><td class="sym">N<sub>b</sub></td><td>Number of bytes generated per image.</td></tr>
+                    <tr><td class="sym">α</td><td>Data and telemetry overhead percentage (headers, housekeeping, protocol overhead).</td></tr>
+                    <tr><td class="sym">N<sub>o</sub></td><td>Number of orbits per day.</td></tr>
+                    <tr><td class="sym">N<sub>io</sub></td><td>Number of images captured per orbit.</td></tr>
+                    <tr><td class="sym">N<sub>id</sub></td><td>Number of images captured per day (N<sub>o</sub> × N<sub>io</sub>).</td></tr>
+                    <tr><td class="sym">T<sub>id</sub></td><td>Total data generated per day, including overhead.</td></tr>
+                </table>
+                <p style="color:#64748B; font-size:0.85rem; margin-top:0.8rem;">
+                In the calculator, image size is derived from resolution × bits-per-pixel (which depends on
+                the selected format and, for JPEG, the compression quality). That per-image size is then
+                scaled by images/orbit, orbits/day and mission duration to obtain the mission total, which
+                is compared against the available storage.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    # ---- Parametros de la calculadora ----
+    with st.container():
+        st.markdown("""
+            <div class="about-card">
+                <h4>⚙️ Calculator parameters</h4>
+                <table class="param-table">
+                    <tr><th>Parameter</th><th>Description</th></tr>
+                    <tr><td class="sym">Camera</td><td>Selects the OpenMV camera model (RT1062 or H7 Plus), which sets the processor, RAM/flash and interface speeds used in the technical report.</td></tr>
+                    <tr><td class="sym">Image Format</td><td>Pixel encoding used to store each image: RGB565 (2 bytes/pixel), Grayscale (1 byte/pixel), or JPEG (compressed, size depends on quality).</td></tr>
+                    <tr><td class="sym">Resolution</td><td>Image width × height in pixels. Higher resolution means larger images and more data generated.</td></tr>
+                    <tr><td class="sym">JPEG Quality</td><td>Compression quality (10–100%) used only when JPEG format is selected; higher quality produces larger files.</td></tr>
+                    <tr><td class="sym">Images per orbit</td><td>Number of images captured during a single orbit.</td></tr>
+                    <tr><td class="sym">Orbits per day</td><td>Number of orbits the satellite completes in one day.</td></tr>
+                    <tr><td class="sym">Mission duration (days)</td><td>Total planned length of the mission, in days.</td></tr>
+                    <tr><td class="sym">Available storage (GB)</td><td>On-board storage capacity available for payload images.</td></tr>
+                </table>
+            </div>
+        """, unsafe_allow_html=True)
+
+    # ---- Resultados ----
+    with st.container():
+        st.markdown("""
+            <div class="about-card">
+                <h4>📊 Results</h4>
+                <table class="param-table">
+                    <tr><th>Metric</th><th>Description</th></tr>
+                    <tr><td class="sym">Image Size</td><td>Data generated by a single image, given resolution and format.</td></tr>
+                    <tr><td class="sym">Data per Orbit</td><td>Image size × images per orbit.</td></tr>
+                    <tr><td class="sym">Data per Day</td><td>Data per orbit × orbits per day.</td></tr>
+                    <tr><td class="sym">Mission Total</td><td>Data per day × mission duration — the full data budget for the mission.</td></tr>
+                    <tr><td class="sym">Storage usage</td><td>Mission total as a percentage of the available on-board storage; a warning appears if it exceeds 100%.</td></tr>
+                </table>
+                <p style="color:#64748B; font-size:0.85rem; margin-top:0.8rem;">
+                You can export the full technical breakdown as a CSV file or a formatted PDF report
+                from the calculator window.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
 
 
 # ==================================================================
@@ -556,5 +874,7 @@ def render_calculator():
 # ==================================================================
 if st.session_state["view"] == "home":
     render_home()
+elif st.session_state["view"] == "about":
+    render_about()
 else:
     render_calculator()
