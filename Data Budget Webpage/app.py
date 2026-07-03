@@ -46,7 +46,7 @@ def inject_global_css():
 
             /* ---------- Botones (look profesional) ---------- */
             .stButton>button {
-                background: linear-gradient(180deg, #2196F3 0%, #1565C0 100%);
+                background: linear-gradient(180deg, #6B7280 0%, #374151 100%);
                 color: #FFFFFF;
                 border: none;
                 width: 100%;
