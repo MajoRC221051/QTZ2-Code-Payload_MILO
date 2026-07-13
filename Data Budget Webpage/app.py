@@ -25,7 +25,7 @@ st.set_page_config(
 
 BASE_DIR = Path(__file__).resolve().parent
 
-# //......Ventana / Vista control........
+
 
 if "view" not in st.session_state:
     st.session_state["view"] = "home"
@@ -37,14 +37,12 @@ if "prev_view" not in st.session_state:
     st.session_state["prev_view"] = "home"
 
 
-# ==================================================================
-# ESTILOS COMPARTIDOS (botones, tarjetas, layout general)
-# ==================================================================
+# 1. Styles
 def inject_global_css():
     st.markdown("""
         <style>
 
-            /* ---------- Botones (look profesional) ---------- */
+            /* ---------- Buttons ---------- */
             .stButton>button {
                 background: linear-gradient(180deg, #6B7280 0%, #374151 100%);
                 color: #FFFFFF;
@@ -165,7 +163,7 @@ def render_logo_row():
 
 
 # ==================================================================
-# VENTANA 1: HOME
+# Window 1: HOME
 # ==================================================================
 def render_home():
     inject_global_css()
@@ -235,7 +233,7 @@ def render_home():
 
 
 # ==================================================================
-# VENTANA 2: CALCULATOR
+# Window 2: CALCULATOR
 # ==================================================================
 def render_calculator():
 
@@ -355,7 +353,7 @@ def render_calculator():
         margin-bottom:1rem;
     }
 
-    /* Header con boton Back / About: evita que el texto se corte */
+    /* Header
     div[data-testid="column"] .secondary-btn .stButton>button{
         min-width: 100px;
         white-space: nowrap;
@@ -363,7 +361,7 @@ def render_calculator():
         padding-right: 0.8rem;
     }
 
-    /* Barra de almacenamiento tipo "slider" */
+    /* slider storage bar
     .stor-bar-track{
         width:100%;
         height:14px;
@@ -568,7 +566,7 @@ def render_calculator():
         else:
             st.caption(f"{pct:.1f}% used")
 
-        # Slider adicional (solo lectura visual) que muestra el nivel de memoria usado
+        # Slider
         st.slider(
             "Memory used (%)",
             min_value=0.0,
@@ -704,7 +702,7 @@ def render_calculator():
 
 
 # ==================================================================
-# VENTANA 3: ABOUT
+# Window 3: ABOUT
 # ==================================================================
 def render_about():
     inject_global_css()
@@ -779,7 +777,7 @@ def render_about():
         unsafe_allow_html=True,
     )
 
-    # ---- Que es la herramienta ----
+    # About
     with st.container():
         st.markdown("""
             <div class="about-card">
@@ -794,7 +792,7 @@ def render_about():
             </div>
         """, unsafe_allow_html=True)
 
-    # ---- Metodologia (basada en la formulacion del payload) ----
+# Methodology
     with st.container():
         st.markdown("""
             <div class="about-card">
@@ -848,7 +846,7 @@ def render_about():
             </div>
         """, unsafe_allow_html=True)
 
-    # ---- Resultados ----
+    # Results 
     with st.container():
         st.markdown("""
             <div class="about-card">
